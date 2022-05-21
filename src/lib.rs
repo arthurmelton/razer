@@ -2,13 +2,15 @@
 
 extern crate websocket;
 
-use crate::event::handler::EventHandler;
-pub use serde_json::Value;
 use std::thread;
-use websocket::sync::Server;
-use websocket::OwnedMessage;
 
+pub use serde_json::Value;
+use websocket::OwnedMessage;
 pub use websocket::sender::Writer;
+use websocket::sync::Server;
+
+use crate::event::handler::EventHandler;
+
 pub mod event;
 pub mod send;
 

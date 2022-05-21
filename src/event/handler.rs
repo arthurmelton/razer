@@ -1,5 +1,6 @@
-use serde_json::Value;
 use std::net::TcpStream;
+
+use serde_json::Value;
 use websocket::sender::Writer;
 
 pub trait EventHandler: Send + Sync + Clone {

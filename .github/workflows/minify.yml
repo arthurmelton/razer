@@ -1,0 +1,18 @@
+on: [push]
+name: minify
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run script file
+        run: |
+          npm i minify@7.0.0 -g
+          apt-get update
+          apt-get -y install moreutils
+          minify ./js/razer-uncompressed.js ./js/razer-compressed.js
+        shell: bash
+      - uses: stefanzweifel/git-auto-commit-action@v4
+       with:
+          commit_message: Minify JS
+          branch: ${{ github.ref }}
