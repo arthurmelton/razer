@@ -8,7 +8,7 @@ jobs:
       - name: Run script file
         run: |
           npm i minify@7.0.0 -g
-          minify ./js/razer-uncompressed.js ./js/razer-compressed.js
+          minify ./js/razer-uncompressed.js > ./js/razer-compressed.js
         shell: bash
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
