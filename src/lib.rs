@@ -1,7 +1,7 @@
 #![crate_type = "lib"]
 
 pub use serde_json::Value;
-pub use ws;
+pub use ws::Sender;
 
 use crate::event::handler::EventHandler;
 
