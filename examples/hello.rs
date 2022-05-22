@@ -2,14 +2,16 @@ use razer::event::event_type::Event::JS;
 use razer::event::handler::EventHandler;
 use razer::listener::Lister;
 use razer::send::send;
-use razer::Value;
 use razer::Sender;
+use razer::Value;
 
 #[derive(Copy)]
 pub struct Handler;
 
 impl Clone for Handler {
-    fn clone(&self) -> Self { *self }
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 
 impl EventHandler for Handler {
