@@ -4,7 +4,7 @@ Object.keys(window).forEach(key => {
         events.push(key.slice(2))
     }
 })
-let socket = new WebSocket("ws://" + window.location.hostname + ":2794");
+let socket = new WebSocket(location.protocol === 'https:' ? "wss://" : "ws://" + window.location.hostname + ":2794");
 for (var i = 0; i < events.length; i++) {
     window.addEventListener(events[i], function (event) {
         socket.send("{\"event_name\":\"" + event.type + "\",\"event\":" + stringify_object(event) + "}");
