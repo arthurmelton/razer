@@ -16,7 +16,7 @@ use ws::util::TcpStream;
 use crate::EventHandler;
 
 #[derive(Clone, Debug)]
-pub struct Lister {
+pub struct Listener {
     cert: Option<X509>,
     key: Option<PKey<Private>>,
     port: u16,
@@ -150,18 +150,18 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
     }
 }
 
-impl Lister {
+impl Listener {
     #[must_use]
-    pub fn new() -> Lister {
-        return Lister {
+    pub fn new() -> Listener {
+        return Listener {
             cert: None,
             key: None,
             port: 2794,
         };
     }
 
-    pub fn with_key(&self, key: &str) -> Lister {
-        return Lister {
+    pub fn with_key(&self, key: &str) -> Listener {
+        return Listener {
             cert: self.clone().cert,
             key: {
                 let data = read_file(key).unwrap();
@@ -171,8 +171,8 @@ impl Lister {
         };
     }
 
-    pub fn with_cert(&self, cert: &str) -> Lister {
-        return Lister {
+    pub fn with_cert(&self, cert: &str) -> Listener {
+        return Listener {
             cert: {
                 let data = read_file(cert).unwrap();
                 Some(X509::from_pem(data.as_ref()).unwrap())

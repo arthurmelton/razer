@@ -5,7 +5,7 @@
 //! ```
 //!use razer::event::event_type::Event::JS;
 //! use razer::event::handler::EventHandler;
-//! use razer::listener::Lister;
+//! use razer::listener::Listener;
 //! use razer::send::send;
 //! use razer::Sender;
 //! use razer::Value;
@@ -26,7 +26,7 @@
 //! }
 //! 
 //! fn main() {
-//!     Lister::new().start(Handler);
+//!     Listener::new().start(Handler);
 //! }
 //! ```
 //! this will alert "Hello" when ever someone goes onto your site

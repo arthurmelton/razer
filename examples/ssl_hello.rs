@@ -1,6 +1,6 @@
 use razer::event::event_type::Event::JS;
 use razer::event::handler::EventHandler;
-use razer::listener::Lister;
+use razer::listener::Listener;
 use razer::send::send;
 use razer::Sender;
 use razer::Value;
@@ -21,7 +21,7 @@ impl EventHandler for Handler {
 }
 
 fn main() {
-    Lister::new()
+    Listener::new()
         .with_cert("certificate.crt")
         .with_key("privateKey.key")
         .start(Handler);
