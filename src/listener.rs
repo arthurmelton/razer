@@ -1,3 +1,5 @@
+use lazy_static::lazy_static;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use std::rc::Rc;
@@ -7,7 +9,9 @@ use openssl::pkey::{PKey, Private};
 use openssl::ssl::{SslAcceptor, SslMethod, SslStream};
 use openssl::x509::X509;
 use serde_json::Value;
+use std::sync::Mutex;
 use ws::util::TcpStream;
+use ws::{CloseCode, Handshake};
 
 use crate::EventHandler;
 
@@ -24,9 +28,28 @@ struct Server<H: EventHandler + 'static + Copy> {
     ssl: Option<Rc<SslAcceptor>>,
 }
 
+lazy_static! {
+    pub static ref CONNECTIONS: Mutex<HashMap<u32, bool>> = Mutex::new(HashMap::new());
+}
+
 impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
     fn upgrade_ssl_server(&mut self, sock: TcpStream) -> ws::Result<SslStream<TcpStream>> {
         self.ssl.clone().unwrap().accept(sock).map_err(From::from)
+    }
+
+    fn on_open(&mut self, _shake: Handshake) -> ws::Result<()> {
+        CONNECTIONS
+            .lock()
+            .unwrap()
+            .insert(self.out.connection_id(), false);
+        Ok(())
+    }
+
+    fn on_close(&mut self, _code: CloseCode, _reason: &str) {
+        CONNECTIONS
+            .lock()
+            .unwrap()
+            .remove(&self.out.connection_id());
     }
 
     fn on_message(&mut self, msg: ws::Message) -> ws::Result<()> {

@@ -9,6 +9,4 @@ edition = "2021"
 openssl = "0.10.40"
 serde_json = "1.0.81"
 ws = {version = "0.9.2", features = ["ssl"]}
-
-[dev-dependencies]
 lazy_static = "1.4.0"

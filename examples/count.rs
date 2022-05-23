@@ -24,18 +24,18 @@ impl Clone for Handler {
 
 impl EventHandler for Handler {
     fn load(&self, _event: Value, ctx: &Sender) {
-        loop {
-            if let Err(why) = send(
-                &ctx,
-                JS,
-                format!(
-                    "document.getElementById(\"counter\").innerHTML = {}",
-                    DATA.lock().unwrap()
-                )
-                    .as_str(),
-            ) {
-                println!("Error: {}", why);
-            }
+        while send(
+            &ctx,
+            JS,
+            format!(
+                "document.getElementById(\"counter\").innerHTML = {}",
+                DATA.lock().unwrap()
+            )
+            .as_str(),
+        )
+        .is_ok()
+        {
+            println!("hello");
             sleep(Duration::from_secs(1));
         }
     }
@@ -43,7 +43,7 @@ impl EventHandler for Handler {
     fn click(&self, _event: Value, ctx: &Sender) {
         let mut counter = DATA.lock().unwrap();
         *counter += 5;
-        if let Err(why) = send(
+        send(
             &ctx,
             JS,
             format!(
@@ -51,9 +51,8 @@ impl EventHandler for Handler {
                 counter
             )
             .as_str(),
-        ) {
-            println!("Error: {}", why);
-        }
+        )
+        .unwrap();
     }
 }
 
