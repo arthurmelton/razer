@@ -16,9 +16,7 @@ impl Clone for Handler {
 
 impl EventHandler for Handler {
     fn load(&self, _event: Value, ctx: &Sender) {
-        if let Err(why) = send(ctx, JS, "alert(\"Hello\")") {
-            println!("Error: {}", why);
-        }
+        send(ctx, JS, "alert(\"Hello\")").unwrap();
     }
 }
 
