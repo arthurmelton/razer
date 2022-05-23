@@ -5,9 +5,8 @@ use razer::listener::Lister;
 use razer::send::send;
 use razer::Sender;
 use razer::Value;
-use std::sync::{Arc, Mutex};
-use std::thread;
-use std::thread::{sleep, Thread};
+use std::sync::Mutex;
+use std::thread::sleep;
 use std::time::Duration;
 
 lazy_static! {
@@ -43,7 +42,7 @@ impl EventHandler for Handler {
 
     fn click(&self, _event: Value, ctx: &Sender) {
         let mut counter = DATA.lock().unwrap();
-        *counter += 1;
+        *counter += 5;
         if let Err(why) = send(
             &ctx,
             JS,
