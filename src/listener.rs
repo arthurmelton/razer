@@ -1,17 +1,17 @@
-use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::Read;
 use std::rc::Rc;
+use std::sync::Mutex;
 use std::thread;
 
+use lazy_static::lazy_static;
 use openssl::pkey::{PKey, Private};
 use openssl::ssl::{SslAcceptor, SslMethod, SslStream};
 use openssl::x509::X509;
 use serde_json::Value;
-use std::sync::Mutex;
-use ws::util::TcpStream;
 use ws::{CloseCode, Handshake};
+use ws::util::TcpStream;
 
 use crate::EventHandler;
 

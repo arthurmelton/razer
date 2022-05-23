@@ -1,13 +1,15 @@
+use std::sync::Mutex;
+use std::thread::sleep;
+use std::time::Duration;
+
 use lazy_static::lazy_static;
+
 use razer::event::event_type::Event::JS;
 use razer::event::handler::EventHandler;
 use razer::listener::Lister;
 use razer::send::send;
 use razer::Sender;
 use razer::Value;
-use std::sync::Mutex;
-use std::thread::sleep;
-use std::time::Duration;
 
 lazy_static! {
     static ref DATA: Mutex<u32> = Mutex::new(0);
@@ -31,9 +33,9 @@ impl EventHandler for Handler {
                 "document.getElementById(\"counter\").innerHTML = {}",
                 DATA.lock().unwrap()
             )
-            .as_str(),
+                .as_str(),
         )
-        .is_ok()
+            .is_ok()
         {
             println!("hello");
             sleep(Duration::from_secs(1));
@@ -50,9 +52,9 @@ impl EventHandler for Handler {
                 "document.getElementById(\"counter\").innerHTML = {}",
                 counter
             )
-            .as_str(),
+                .as_str(),
         )
-        .unwrap();
+            .unwrap();
     }
 }
 
