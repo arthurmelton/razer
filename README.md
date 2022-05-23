@@ -18,4 +18,4 @@ To start hosting a server go to this url https://crates.io/crates/razer and on t
 
 ### Getting started
 
-You can read the examples I have made and work off of those and the documentation is here https://docs.rs/razer/latest/razer/
+You can read the examples I have made and work off of those and the documentation is here https://docs.rs/razer/
