@@ -1,5 +1,8 @@
 use std::fmt;
 
+/// This will tell the sender what you want to do <br />
+/// JS -> will run js on the website <br />
+/// HTML -> will set the body tag
 #[derive(Debug, Clone, Copy)]
 pub enum Event {
     JS,
