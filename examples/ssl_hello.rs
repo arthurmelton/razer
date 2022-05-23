@@ -23,5 +23,8 @@ impl EventHandler for Handler {
 }
 
 fn main() {
-    Lister::new().with_cert("certificate.crt").with_key("privateKey.key").start(Handler);
+    Lister::new()
+        .with_cert("certificate.crt")
+        .with_key("privateKey.key")
+        .start(Handler);
 }
