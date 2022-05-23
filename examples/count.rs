@@ -37,14 +37,13 @@ impl EventHandler for Handler {
         )
             .is_ok()
         {
-            println!("hello");
             sleep(Duration::from_secs(1));
         }
     }
 
     fn click(&self, _event: Value, ctx: &Sender) {
         let mut counter = DATA.lock().unwrap();
-        *counter += 5;
+        *counter += 1;
         send(
             &ctx,
             JS,
