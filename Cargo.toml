@@ -2,7 +2,7 @@
 name = "razer"
 version = "0.1.2"
 edition = "2021"
-description = "A serverside way to controll your website with rust"
+description = "A server side way to controll your website with rust"
 license = "MIT"
 categories = ["web-programming", "web-programming::websocket"]
 exclude = ["js/**/*"]
