@@ -9,9 +9,9 @@ use lazy_static::lazy_static;
 use openssl::pkey::{PKey, Private};
 use openssl::ssl::{SslAcceptor, SslMethod, SslStream};
 use openssl::x509::X509;
-use serde_json::{json, Value};
 use razer_ws::{CloseCode, Handshake};
 use razer_ws::util::TcpStream;
+use serde_json::{json, Value};
 
 use crate::EventHandler;
 
@@ -140,7 +140,10 @@ impl<H: EventHandler + 'static + Copy> razer_ws::Handler for Server<H> {
                 "volumechange" => handler.volumechange(data["event"].clone(), &out),
                 "waiting" => handler.waiting(data["event"].clone(), &out),
                 "wheel" => handler.wheel(data["event"].clone(), &out),
-                "eval" => handler.eval(json!({"event":data["event"].clone(), "data":data["data"].clone()}), &out),
+                "eval" => handler.eval(
+                    json!({"event":data["event"].clone(), "data":data["data"].clone()}),
+                    &out,
+                ),
                 _ => {}
             };
         });

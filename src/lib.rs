@@ -36,9 +36,9 @@
 //! <script src="https://cdn.jsdelivr.net/gh/AMTitan/razer/js/razer.min.js"></script>
 //! ```
 
-pub use serde_json::Value;
 pub use razer_ws::Sender;
 pub use razer_ws::util::Token;
+pub use serde_json::Value;
 
 use crate::event::handler::EventHandler;
 

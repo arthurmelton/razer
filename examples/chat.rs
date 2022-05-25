@@ -32,7 +32,7 @@ impl EventHandler for Handler {
                 MESSAGES.lock().unwrap().join("</p><p>")
             ),
         )
-        .unwrap();
+            .unwrap();
     }
 
     fn keydown(&self, event: Value, ctx: &Sender) {

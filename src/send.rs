@@ -50,7 +50,12 @@ pub fn send(client: &razer_ws::Sender, event: Event, data: &str) -> Result<(), (
 /// this will send the alert to the first client that ever went onto the website <br />
 /// to get the current id you can use `ctx.token()`
 /// this will fail if the connection was closed
-pub fn send_to(client: &razer_ws::Sender, token: Token, event: Event, data: &str) -> Result<(), ()> {
+pub fn send_to(
+    client: &razer_ws::Sender,
+    token: Token,
+    event: Event,
+    data: &str,
+) -> Result<(), ()> {
     let mut new_client = client.clone();
     let connections = CONNECTIONS.lock().unwrap();
     let connection = connections.clone();
