@@ -28,7 +28,7 @@ impl EventHandler for Handler {
             JS,
             &format!(
                 "document.getElementById(\"text\").innerHTML += \"<p>{}</p>\"",
-                event.as_str().unwrap()
+                event["event"].as_str().unwrap()
             ),
         );
     }
