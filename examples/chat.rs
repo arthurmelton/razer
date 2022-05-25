@@ -1,13 +1,7 @@
-use std::sync::Mutex;
-use std::thread::sleep;
-use std::time::Duration;
-
-use lazy_static::lazy_static;
-
 use razer::event::event_type::Event::{EVAL, JS};
 use razer::event::handler::EventHandler;
-use razer::listener::{CONNECTIONS, Listener};
-use razer::send::{broadcast, send, send_to};
+use razer::listener::Listener;
+use razer::send::{broadcast, send};
 use razer::Sender;
 use razer::Value;
 
@@ -23,8 +17,8 @@ impl Clone for Handler {
 impl EventHandler for Handler {
     fn keydown(&self, event: Value, ctx: &Sender) {
         if event["key"].as_str().unwrap() == "Enter" {
-            send(ctx, EVAL, "document.getElementById(\"input\").value");
-            send(ctx, JS, "document.getElementById(\"input\").value = \"\"");
+            send(ctx, EVAL, "document.getElementById(\"input\").value").unwrap();
+            send(ctx, JS, "document.getElementById(\"input\").value = \"\"").unwrap();
         }
     }
 
@@ -36,7 +30,7 @@ impl EventHandler for Handler {
                 "document.getElementById(\"text\").innerHTML += \"<p>{}</p>\"",
                 event.as_str().unwrap()
             ),
-        )
+        );
     }
 }
 
