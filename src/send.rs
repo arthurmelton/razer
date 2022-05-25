@@ -1,5 +1,7 @@
 use std::thread;
+
 use ws::util::Token;
+
 use crate::event::event_type::Event;
 use crate::listener::CONNECTIONS;
 
@@ -47,8 +49,8 @@ pub fn send(client: &ws::Sender, event: Event, data: &str) -> Result<(), ()> {
 /// this will send the alert to the first client that ever went onto the website <br />
 /// to get the current id you can use `ctx.token()`
 /// this will fail if the connection was closed
-pub fn send_to(client: &ws::Sender, token: Token, event:Event, data: &str) -> Result<(),()> {
-    let mut new_client= client.clone();
+pub fn send_to(client: &ws::Sender, token: Token, event: Event, data: &str) -> Result<(), ()> {
+    let mut new_client = client.clone();
     let connections = CONNECTIONS.lock().unwrap();
     let connection = connections.clone();
     drop(connections);
@@ -58,8 +60,7 @@ pub fn send_to(client: &ws::Sender, token: Token, event:Event, data: &str) -> Re
             return Err(());
         }
         send(&new_client, event, data)
-    }
-    else {
+    } else {
         Err(())
     }
 }
@@ -74,18 +75,18 @@ pub fn send_to(client: &ws::Sender, token: Token, event:Event, data: &str) -> Re
 /// }
 /// ```
 /// this will send the alert to every client that is currently on the site <br />
-pub fn broadcast(client: &ws::Sender, event:Event, data: &str) {
+pub fn broadcast(client: &ws::Sender, event: Event, data: &str) {
     let connections = CONNECTIONS.lock().unwrap();
     let connection = connections.clone();
     let mut threads = Vec::new();
     drop(connections);
-    for (i,_) in connection.into_iter() {
+    for (i, _) in connection.into_iter() {
         let message = data.to_string();
         let client = client.clone();
         threads.push(thread::spawn(move || {
             let _ = send_to(&client, Token::from(i.clone()), event.clone(), &message);
         }));
-    };
+    }
     for i in threads {
         i.join().unwrap()
     }

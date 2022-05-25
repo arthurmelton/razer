@@ -8,7 +8,7 @@ use std::fmt;
 pub enum Event {
     JS,
     HTML,
-    EVAL
+    EVAL,
 }
 
 impl fmt::Display for Event {

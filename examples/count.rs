@@ -32,10 +32,10 @@ impl EventHandler for Handler {
                 DATA.lock().unwrap()
             )
                 .as_str(),
-        ).unwrap();
+        )
+            .unwrap();
     }
-    
-    
+
     fn click(&self, _event: Value, ctx: &Sender) {
         let mut counter = DATA.lock().unwrap();
         *counter += 1;

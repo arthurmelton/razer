@@ -29,7 +29,14 @@ impl EventHandler for Handler {
     }
 
     fn eval(&self, event: Value, ctx: &Sender) {
-        broadcast(ctx, JS, &format!("document.getElementById(\"text\").innerHTML += \"<p>{}</p>\"", event.as_str().unwrap()))
+        broadcast(
+            ctx,
+            JS,
+            &format!(
+                "document.getElementById(\"text\").innerHTML += \"<p>{}</p>\"",
+                event.as_str().unwrap()
+            ),
+        )
     }
 }
 

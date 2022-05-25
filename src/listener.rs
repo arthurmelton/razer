@@ -46,10 +46,7 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
     }
 
     fn on_close(&mut self, _code: CloseCode, _reason: &str) {
-        CONNECTIONS
-            .lock()
-            .unwrap()
-            .remove(&self.out.token().0);
+        CONNECTIONS.lock().unwrap().remove(&self.out.token().0);
     }
 
     fn on_message(&mut self, msg: ws::Message) -> ws::Result<()> {

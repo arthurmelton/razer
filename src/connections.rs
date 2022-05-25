@@ -1,4 +1,3 @@
-
 /// This will return a bool on if the connection is closed
 /// ```
 /// use razer::Sender;
