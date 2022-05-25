@@ -1,6 +1,6 @@
 use std::thread;
 
-use ws::util::Token;
+use razer_ws::util::Token;
 
 use crate::event::event_type::Event;
 use crate::listener::CONNECTIONS;
@@ -17,7 +17,7 @@ use crate::listener::CONNECTIONS;
 /// }
 /// ```
 /// this will fail if the connection was closed
-pub fn send(client: &ws::Sender, event: Event, data: &str) -> Result<(), ()> {
+pub fn send(client: &razer_ws::Sender, event: Event, data: &str) -> Result<(), ()> {
     if crate::connections::closed(client) {
         return Err(());
     }
@@ -50,7 +50,7 @@ pub fn send(client: &ws::Sender, event: Event, data: &str) -> Result<(), ()> {
 /// this will send the alert to the first client that ever went onto the website <br />
 /// to get the current id you can use `ctx.token()`
 /// this will fail if the connection was closed
-pub fn send_to(client: &ws::Sender, token: Token, event: Event, data: &str) -> Result<(), ()> {
+pub fn send_to(client: &razer_ws::Sender, token: Token, event: Event, data: &str) -> Result<(), ()> {
     let mut new_client = client.clone();
     let connections = CONNECTIONS.lock().unwrap();
     let connection = connections.clone();
@@ -76,7 +76,7 @@ pub fn send_to(client: &ws::Sender, token: Token, event: Event, data: &str) -> R
 /// }
 /// ```
 /// this will send the alert to every client that is currently on the site <br />
-pub fn broadcast(client: &ws::Sender, event: Event, data: &str) {
+pub fn broadcast(client: &razer_ws::Sender, event: Event, data: &str) {
     let connections = CONNECTIONS.lock().unwrap();
     let connection = connections.clone();
     let mut threads = Vec::new();

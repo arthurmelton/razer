@@ -37,8 +37,8 @@
 //! ```
 
 pub use serde_json::Value;
-pub use ws::Sender;
-pub use ws::util::Token;
+pub use razer_ws::Sender;
+pub use razer_ws::util::Token;
 
 use crate::event::handler::EventHandler;
 

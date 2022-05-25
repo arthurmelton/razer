@@ -6,7 +6,7 @@
 /// // connection was closed here
 /// assert_eq!(closed(ctx), true);
 /// ```
-pub fn closed(ctx: &ws::Sender) -> bool {
+pub fn closed(ctx: &razer_ws::Sender) -> bool {
     !crate::listener::CONNECTIONS
         .lock()
         .unwrap()
@@ -21,7 +21,7 @@ pub fn closed(ctx: &ws::Sender) -> bool {
 /// // connection was closed here
 /// assert_eq!(open(ctx), false);
 /// ```
-pub fn open(ctx: &ws::Sender) -> bool {
+pub fn open(ctx: &razer_ws::Sender) -> bool {
     crate::listener::CONNECTIONS
         .lock()
         .unwrap()

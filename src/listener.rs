@@ -10,8 +10,8 @@ use openssl::pkey::{PKey, Private};
 use openssl::ssl::{SslAcceptor, SslMethod, SslStream};
 use openssl::x509::X509;
 use serde_json::Value;
-use ws::{CloseCode, Handshake};
-use ws::util::TcpStream;
+use razer_ws::{CloseCode, Handshake};
+use razer_ws::util::TcpStream;
 
 use crate::EventHandler;
 
@@ -23,7 +23,7 @@ pub struct Listener {
 }
 
 struct Server<H: EventHandler + 'static + Copy> {
-    out: ws::Sender,
+    out: razer_ws::Sender,
     handler: H,
     ssl: Option<Rc<SslAcceptor>>,
 }
@@ -32,12 +32,12 @@ lazy_static! {
     pub static ref CONNECTIONS: Mutex<HashMap<usize, u32>> = Mutex::new(HashMap::new());
 }
 
-impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
-    fn upgrade_ssl_server(&mut self, sock: TcpStream) -> ws::Result<SslStream<TcpStream>> {
+impl<H: EventHandler + 'static + Copy> razer_ws::Handler for Server<H> {
+    fn upgrade_ssl_server(&mut self, sock: TcpStream) -> razer_ws::Result<SslStream<TcpStream>> {
         self.ssl.clone().unwrap().accept(sock).map_err(From::from)
     }
 
-    fn on_open(&mut self, _shake: Handshake) -> ws::Result<()> {
+    fn on_open(&mut self, _shake: Handshake) -> razer_ws::Result<()> {
         CONNECTIONS
             .lock()
             .unwrap()
@@ -49,7 +49,7 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
         CONNECTIONS.lock().unwrap().remove(&self.out.token().0);
     }
 
-    fn on_message(&mut self, msg: ws::Message) -> ws::Result<()> {
+    fn on_message(&mut self, msg: razer_ws::Message) -> razer_ws::Result<()> {
         let handler = self.handler;
         let out = self.out.clone();
         thread::spawn(move || {
@@ -192,12 +192,12 @@ impl Listener {
                 builder.build()
             });
 
-            ws::Builder::new()
-                .with_settings(ws::Settings {
+            razer_ws::Builder::new()
+                .with_settings(razer_ws::Settings {
                     encrypt_server: true,
-                    ..ws::Settings::default()
+                    ..razer_ws::Settings::default()
                 })
-                .build(|out: ws::Sender| Server {
+                .build(|out: razer_ws::Sender| Server {
                     out,
                     handler,
                     ssl: Some(acceptor.clone()),
@@ -206,11 +206,11 @@ impl Listener {
                 .listen(format!("0.0.0.0:{}", self.port))
                 .unwrap();
         } else {
-            ws::Builder::new()
-                .with_settings(ws::Settings {
-                    ..ws::Settings::default()
+            razer_ws::Builder::new()
+                .with_settings(razer_ws::Settings {
+                    ..razer_ws::Settings::default()
                 })
-                .build(|out: ws::Sender| Server {
+                .build(|out: razer_ws::Sender| Server {
                     out,
                     handler,
                     ssl: None,
