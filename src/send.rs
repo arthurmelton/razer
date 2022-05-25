@@ -1,5 +1,4 @@
 use std::thread;
-use std::thread::Thread;
 use ws::util::Token;
 use crate::event::event_type::Event;
 use crate::listener::CONNECTIONS;
@@ -46,15 +45,23 @@ pub fn send(client: &ws::Sender, event: Event, data: &str) -> Result<(), ()> {
 /// }
 /// ```
 /// this will send the alert to the first client that ever went onto the website <br />
-/// to get the current id you can use `ctx.connection_id`
+/// to get the current id you can use `ctx.token()`
 /// this will fail if the connection was closed
-pub fn send_to(client: &ws::Sender, token: u32, event:Event, data: &str) -> Result<(),()> {
+pub fn send_to(client: &ws::Sender, token: Token, event:Event, data: &str) -> Result<(),()> {
     let mut new_client= client.clone();
-    new_client.change_token(token);
-    if crate::connections::closed(&new_client) {
-        return Err(());
+    let connections = CONNECTIONS.lock().unwrap();
+    let connection = connections.clone();
+    drop(connections);
+    if connection.contains_key(&token.0) {
+        new_client.change_token(token, *connection.get(&token.0).unwrap());
+        if crate::connections::closed(&new_client) {
+            return Err(());
+        }
+        send(&new_client, event, data)
     }
-    send(&new_client, event, data)
+    else {
+        Err(())
+    }
 }
 
 /// This code will send a message to every client
@@ -68,20 +75,18 @@ pub fn send_to(client: &ws::Sender, token: u32, event:Event, data: &str) -> Resu
 /// ```
 /// this will send the alert to every client that is currently on the site <br />
 pub fn broadcast(client: &ws::Sender, event:Event, data: &str) {
-    let mut threads = Vec::new();
     let connections = CONNECTIONS.lock().unwrap();
-    for (i, _) in connections.clone().into_iter() {
-        let sends = data.clone().to_string();
-        let mut new_client= client.clone();
-        threads.push(thread::spawn(move|| {
-            new_client.change_token(i);
-            if crate::connections::closed(&new_client) {
-                return Err(());
-            }
-            send(&new_client, event, &*sends)
+    let connection = connections.clone();
+    let mut threads = Vec::new();
+    drop(connections);
+    for (i,_) in connection.into_iter() {
+        let message = data.to_string();
+        let client = client.clone();
+        threads.push(thread::spawn(move || {
+            let _ = send_to(&client, Token::from(i.clone()), event.clone(), &message);
         }));
-    }
-    for h in threads {
-        h.join().unwrap();
+    };
+    for i in threads {
+        i.join().unwrap()
     }
 }

@@ -11,7 +11,7 @@ pub fn closed(ctx: &ws::Sender) -> bool {
     !crate::listener::CONNECTIONS
         .lock()
         .unwrap()
-        .contains_key(&ctx.connection_id())
+        .contains_key(&ctx.token().0)
 }
 
 /// This will return a bool on if the connection is open
@@ -26,5 +26,5 @@ pub fn open(ctx: &ws::Sender) -> bool {
     crate::listener::CONNECTIONS
         .lock()
         .unwrap()
-        .contains_key(&ctx.connection_id())
+        .contains_key(&ctx.token().0)
 }

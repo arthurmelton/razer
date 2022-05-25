@@ -29,7 +29,7 @@ struct Server<H: EventHandler + 'static + Copy> {
 }
 
 lazy_static! {
-    pub static ref CONNECTIONS: Mutex<HashMap<u32, bool>> = Mutex::new(HashMap::new());
+    pub static ref CONNECTIONS: Mutex<HashMap<usize, u32>> = Mutex::new(HashMap::new());
 }
 
 impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
@@ -41,7 +41,7 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
         CONNECTIONS
             .lock()
             .unwrap()
-            .insert(self.out.connection_id(), false);
+            .insert(self.out.token().0, self.out.connection_id());
         Ok(())
     }
 
@@ -49,7 +49,7 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
         CONNECTIONS
             .lock()
             .unwrap()
-            .remove(&self.out.connection_id());
+            .remove(&self.out.token().0);
     }
 
     fn on_message(&mut self, msg: ws::Message) -> ws::Result<()> {
