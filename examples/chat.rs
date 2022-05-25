@@ -16,7 +16,7 @@ impl Clone for Handler {
 
 impl EventHandler for Handler {
     fn keydown(&self, event: Value, ctx: &Sender) {
-        if event["key"].as_str().unwrap() == "Enter" {
+        if event["key"].as_str().unwrap() == "Enter" && event["srcElement"]["id"] == "input" {
             send(ctx, EVAL, "document.getElementById(\"input\").value").unwrap();
             send(ctx, JS, "document.getElementById(\"input\").value = \"\"").unwrap();
         }
