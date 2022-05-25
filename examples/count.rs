@@ -1,13 +1,11 @@
 use std::sync::Mutex;
-use std::thread::sleep;
-use std::time::Duration;
 
 use lazy_static::lazy_static;
 
 use razer::event::event_type::Event::JS;
 use razer::event::handler::EventHandler;
 use razer::listener::Listener;
-use razer::send::send;
+use razer::send::{broadcast, send};
 use razer::Sender;
 use razer::Value;
 
@@ -26,7 +24,7 @@ impl Clone for Handler {
 
 impl EventHandler for Handler {
     fn load(&self, _event: Value, ctx: &Sender) {
-        while send(
+        send(
             &ctx,
             JS,
             format!(
@@ -34,17 +32,14 @@ impl EventHandler for Handler {
                 DATA.lock().unwrap()
             )
                 .as_str(),
-        )
-            .is_ok()
-        {
-            sleep(Duration::from_secs(1));
-        }
+        ).unwrap();
     }
-
+    
+    
     fn click(&self, _event: Value, ctx: &Sender) {
         let mut counter = DATA.lock().unwrap();
         *counter += 1;
-        send(
+        broadcast(
             &ctx,
             JS,
             format!(
@@ -52,8 +47,7 @@ impl EventHandler for Handler {
                 counter
             )
                 .as_str(),
-        )
-            .unwrap();
+        );
     }
 }
 
