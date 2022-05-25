@@ -1,6 +1,6 @@
 [package]
 name = "razer"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "A server side way to controll your website with rust"
 license = "MIT"
