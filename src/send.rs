@@ -40,8 +40,9 @@ pub fn send(client: &ws::Sender, event: Event, data: &str) -> Result<(), ()> {
 /// use razer::event::event_type::Event::JS;
 /// use razer::send::send_to;
 /// use razer::{Sender, Value};
+/// use razer::Token;
 /// fn load(&self, _event: Value, ctx: &Sender) {
-///     if send_to(ctx, 0, JS, "alert(\"Hello\")").is_err() {
+///     if send_to(ctx, Token::from(0), JS, "alert(\"Hello\")").is_err() {
 ///         println!("connection is closed");
 ///     }   
 /// }

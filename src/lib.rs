@@ -29,7 +29,7 @@
 //!     Listener::new().start(Handler);
 //! }
 //! ```
-//! this will alert "Hello" when ever someone goes onto your site
+//! this will alert "Hello" when ever someone goes onto your site <br />
 //! To add the script all you will have to do is add this to your html
 //!
 //! ```html
@@ -38,6 +38,7 @@
 
 pub use serde_json::Value;
 pub use ws::Sender;
+pub use ws::util::Token;
 
 use crate::event::handler::EventHandler;
 
