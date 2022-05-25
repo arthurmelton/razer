@@ -39,5 +39,8 @@ socket.onmessage = function (event) {
         eval(data.data);
     } else if (data.name === "html") {
         document.querySelector("body").innerHTML = data.data;
+    }  else if (data.name === "eval") {
+        var run = data.data;
+        socket.send("{\"event_name\":\"eval\",\"event\":\"" + eval(run).replaceAll("\"","\\\"") + "\",\"data\":\"" + run.replaceAll("\"","\\\"") + "\"}");
     }
 };

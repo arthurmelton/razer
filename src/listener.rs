@@ -143,6 +143,7 @@ impl<H: EventHandler + 'static + Copy> ws::Handler for Server<H> {
                 "volumechange" => handler.volumechange(data["event"].clone(), &out),
                 "waiting" => handler.waiting(data["event"].clone(), &out),
                 "wheel" => handler.wheel(data["event"].clone(), &out),
+                "eval" => handler.eval(data["event"].clone(), &out),
                 _ => {}
             };
         });

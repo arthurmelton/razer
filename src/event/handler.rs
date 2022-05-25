@@ -86,4 +86,5 @@ pub trait EventHandler: Send + Sync {
     fn volumechange(&self, _event: Value, _ctx: &ws::Sender) {}
     fn waiting(&self, _event: Value, _ctx: &ws::Sender) {}
     fn wheel(&self, _event: Value, _ctx: &ws::Sender) {}
+    fn eval(&self, _event: Value, _ctx: &ws::Sender) {}
 }
