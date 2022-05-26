@@ -4,12 +4,30 @@ Object.keys(window).forEach(key => {
         events.push(key.slice(2))
     }
 })
-let socket = new WebSocket(location.protocol === 'https:' ? "wss://" : "ws://" + window.location.hostname + ":2794");
-for (var i = 0; i < events.length; i++) {
-    window.addEventListener(events[i], function (event) {
+
+window.addEventListener("load", function(event) {
+    const socket = new WebSocket(location.protocol === 'https:' ? "wss://" : "ws://" + window.location.hostname + ":2794");
+    socket.onopen = function() {
         socket.send("{\"event_name\":\"" + event.type + "\",\"event\":" + stringify_object(event) + "}");
-    })
-}
+        for (var i = 0; i < events.length; i++) {
+            window.addEventListener(events[i], function (event) {
+                socket.send("{\"event_name\":\"" + event.type + "\",\"event\":" + stringify_object(event) + "}");
+            })
+        }
+    }
+
+    socket.onmessage = function (event) {
+        let data = JSON.parse(event.data);
+        if (data.name === "js") {
+            eval(data.data);
+        } else if (data.name === "html") {
+            document.querySelector("body").innerHTML = data.data;
+        } else if (data.name === "eval") {
+            var run = data.data;
+            socket.send("{\"event_name\":\"eval\",\"event\":\"" + eval(run).replaceAll("\"", "\\\"") + "\",\"data\":\"" + run.replaceAll("\"", "\\\"") + "\"}");
+        }
+    };
+})
 
 function stringify_object(object, depth = 0, max_depth = 2) {
     // change max_depth to see more levels, for a touch event, 2 is good
@@ -32,15 +50,3 @@ function stringify_object(object, depth = 0, max_depth = 2) {
 
     return depth ? obj : JSON.stringify(obj);
 }
-
-socket.onmessage = function (event) {
-    let data = JSON.parse(event.data);
-    if (data.name === "js") {
-        eval(data.data);
-    } else if (data.name === "html") {
-        document.querySelector("body").innerHTML = data.data;
-    } else if (data.name === "eval") {
-        var run = data.data;
-        socket.send("{\"event_name\":\"eval\",\"event\":\"" + eval(run).replaceAll("\"", "\\\"") + "\",\"data\":\"" + run.replaceAll("\"", "\\\"") + "\"}");
-    }
-};
