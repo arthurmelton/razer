@@ -7,8 +7,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run script file
         run: |
-          npm i minify@7.0.0 -g
-          minify ./js/razer.js > ./js/razer.min.js
+          npm i terser
+          echo 'const{minify:e}=require("terser"),s=require("fs"),r={compress:{dead_code:!0,drop_console:!1,drop_debugger:!0,keep_classnames:!1,keep_fargs:!1,keep_fnames:!1,keep_infinity:!1},mangle:{eval:!0,keep_classnames:!1,keep_fnames:!1,toplevel:!0,safari10:!1},module:!1,sourceMap:!1,output:{comments:"some"}},a=s.readFileSync("js/razer.js","utf8");e(a,r).then((e=>{s.writeFileSync("js/razer.min.js",e.code)}));' | node
         shell: bash
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
