@@ -33,7 +33,13 @@
 //! To add the script all you will have to do is add this to your html
 //!
 //! ```html
-//! <script src="https://cdn.jsdelivr.net/gh/AMTitan/razer/js/razer.min.js"></script>
+//! <script src="https://cdn.jsdelivr.net/gh/AMTitan/razer@(your version)/js/razer.min.js"></script>
+//! ```
+//! 
+//! an example would be
+//! 
+//! ```html
+//! <script src="https://cdn.jsdelivr.net/gh/AMTitan/razer@0.1.4/js/razer.min.js"></script>
 //! ```
 
 pub use razer_ws::Sender;
