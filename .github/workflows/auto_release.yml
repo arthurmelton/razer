@@ -4,7 +4,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: gh release create "v$(cat Cargo.toml | grep "version = \"" | grep -Eo "[^\"]*" | head -n2 | tail -n 1)" --generate-notes
+      - uses: actions/checkout@v2
+      - name: Make version
+        run: gh release create "v$(cat Cargo.toml | grep "version = \"" | grep -Eo "[^\"]*" | head -n2 | tail -n 1)" --generate-notes
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
